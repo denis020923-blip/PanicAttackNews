@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a0710"><title>Panic-Snos — Control Center</title>
+<style>
+:root{--bg:#090710;--panel:#12101d;--panel2:#191526;--line:#30263e;--accent:#ff3158;--accent2:#9c1748;--text:#f7f3fb;--muted:#aaa1b8;--good:#50e3a4;--shadow:0 18px 55px #0007;--surface-soft:color-mix(in srgb,var(--accent) 5%,var(--panel));--surface-deep:color-mix(in srgb,var(--accent) 5%,var(--bg));--surface-hover:color-mix(in srgb,var(--accent) 12%,var(--panel2))}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 70% -10%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 40%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:22px 15px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--bg) 92%,var(--accent));backdrop-filter:blur(18px);display:flex;flex-direction:column;gap:22px}.brand{display:flex;align-items:center;gap:11px;padding:5px 8px;font-weight:900;letter-spacing:1.5px}.logo{width:43px;height:43px;position:relative;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 28px color-mix(in srgb,var(--accent) 40%,transparent);font-size:22px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px}.nav-label{color:#756c84;font-size:10px;letter-spacing:2px;padding:0 12px;margin-bottom:-12px}.nav{display:grid;gap:6px}.nav button{border:1px solid transparent;background:transparent;text-align:left;padding:12px;border-radius:12px;color:var(--muted);display:flex;gap:12px;align-items:center;transition:.2s}.nav button:hover,.nav button.active{color:var(--text);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 17%,transparent),transparent);border-color:color-mix(in srgb,var(--accent) 36%,var(--line));transform:translateX(2px)}.nav .ico{width:23px;height:23px;display:grid;place-items:center;flex:0 0 23px;color:var(--muted);transition:transform .2s,color .2s}.nav .ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav button:hover .ico,.nav button.active .ico{color:var(--accent);transform:scale(1.08)}.owner-mini{margin-top:auto;border:1px solid var(--line);border-radius:15px;padding:13px;background:linear-gradient(135deg,var(--panel2),var(--bg))}.crown{color:#ffd76b;filter:drop-shadow(0 0 8px #ffcb55);font-size:18px}.owner-name{font-weight:900;background:linear-gradient(90deg,#fff,#ff6eaa,#bda1ff,#fff);background-size:250%;color:transparent;background-clip:text;animation:shine 4s linear infinite}.muted{color:var(--muted)}.tiny{font-size:12px}.main{min-width:0;padding:25px clamp(15px,3vw,38px) 50px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:26px}.eyebrow{font-size:11px;letter-spacing:2.2px;color:var(--accent);font-weight:800}.topbar h1{font-size:clamp(24px,3vw,34px);margin:3px 0 0;line-height:1.2}.top-actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:linear-gradient(145deg,var(--panel2),var(--surface-deep));padding:10px 14px;border-radius:11px;transition:.2s}.btn:hover{transform:translateY(-1px);border-color:var(--accent)}.btn.primary{border:0;background:linear-gradient(110deg,var(--accent),var(--accent2));font-weight:800;box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 22%,transparent)}.btn.small{padding:7px 10px;font-size:12px}.page{display:none;animation:appear .25s ease}.page.active{display:block}.hero{border:1px solid var(--line);border-radius:23px;padding:clamp(22px,4vw,40px);background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 15%,var(--panel)),var(--panel) 60%);position:relative;overflow:hidden;box-shadow:var(--shadow)}.hero:after{content:"PA";position:absolute;right:4%;top:-65px;font-weight:1000;font-size:clamp(150px,24vw,280px);color:#fff;opacity:.025;pointer-events:none}.hero h2{font-size:clamp(30px,5vw,49px);line-height:1.05;max-width:700px;margin:12px 0}.hero p{color:var(--muted);max-width:650px}.pills{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.pill{font-size:12px;padding:6px 10px;border-radius:99px;border:1px solid var(--line);color:#ddd2e9;background:#ffffff05}.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:15px;margin-top:17px}.card{grid-column:span 4;background:linear-gradient(145deg,var(--panel),var(--surface-deep));border:1px solid var(--line);border-radius:17px;padding:18px;min-width:0;box-shadow:var(--shadow)}.card.wide{grid-column:span 8}.card.full{grid-column:1/-1}.card h3{margin:4px 0 8px;font-size:17px}.stat{font-size:29px;font-weight:900;letter-spacing:-1px}.card-icon{width:42px;height:42px;display:grid;place-items:center;font-size:20px;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:13px;background:color-mix(in srgb,var(--accent) 10%,var(--panel));box-shadow:inset 0 1px #ffffff0c}.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:0 0 16px}.section-title h2{font-size:26px;margin:4px 0}.field{display:grid;gap:7px;margin:14px 0}.field label{font-size:12px;color:#d6cde1;font-weight:700}.field input,.field select,.field textarea{width:100%;background:var(--surface-deep);border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--text);outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}.field textarea{min-height:100px;resize:vertical}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.notice{border-left:3px solid var(--accent);padding:12px 14px;background:#ffffff05;color:var(--muted);font-size:13px;border-radius:0 10px 10px 0}.list{display:grid;gap:10px}.item{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:13px;background:#ffffff03}.item .grow{flex:1;min-width:0}.item strong{display:block;overflow-wrap:anywhere}.badge{font-size:10px;letter-spacing:.8px;padding:5px 8px;border-radius:99px;background:#ffb84a18;color:#ffc76c;border:1px solid #ffb84a33;white-space:nowrap}.badge.good{background:#50e3a416;color:var(--good);border-color:#50e3a433}.platforms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.platform{border:1px solid var(--line);border-radius:13px;background:var(--panel2);padding:14px;text-align:left}.platform:hover{border-color:var(--accent);transform:translateY(-2px)}.platform b{display:block;margin-top:8px}.platform span{font-size:23px}.themes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.theme{border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:12px;text-align:left}.theme i{display:block;height:28px;border-radius:8px;margin-bottom:8px;background:linear-gradient(110deg,var(--c),color-mix(in srgb,var(--c) 12%,var(--bg)));box-shadow:0 4px 14px color-mix(in srgb,var(--c) 20%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}.theme.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}.privileges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.tier{border:1px solid var(--line);border-radius:17px;padding:18px;background:linear-gradient(145deg,var(--panel),var(--surface-deep));position:relative;overflow:hidden}.tier.featured{border-color:var(--accent);box-shadow:0 0 30px color-mix(in srgb,var(--accent) 12%,transparent)}.price{font-size:28px;font-weight:900;margin:12px 0}.tier ul{padding-left:19px;color:var(--muted);font-size:13px;min-height:110px}.tier li{margin:7px 0}.contact-card{text-align:center;padding:35px 15px}.contact-crown{font-size:36px;color:#ffd76b;filter:drop-shadow(0 0 15px #ffd76b88)}.contact-owner{font-size:clamp(26px,5vw,44px);font-weight:1000;background:linear-gradient(90deg,#ffcc70,#ff4f9a,#a78bfa,#60d8ff,#ffcc70);background-size:300%;color:transparent;background-clip:text;animation:shine 5s linear infinite}.settings-row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid var(--line)}.switch{accent-color:var(--accent);width:18px;height:18px}.toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--panel2);border:1px solid var(--accent);border-radius:12px;padding:12px 16px;z-index:20;transition:.25s;max-width:90vw}.toast.show{opacity:1;transform:translate(-50%,0)}.meter{height:7px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:10px}.meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#f8a4ff);transition:width .4s}.footer{border-top:1px solid var(--line);margin-top:35px;padding-top:18px;color:var(--muted);font-size:12px}@keyframes shine{to{background-position:250% center}}@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes float{50%{transform:translateY(-5px)}}@media(max-width:950px){.app{grid-template-columns:78px minmax(0,1fr)}.sidebar{padding:18px 9px}.brand{justify-content:center;padding:0}.brand .brand-text,.nav-label,.nav button .nav-text,.owner-mini .owner-info{display:none}.nav button{justify-content:center;padding:13px 6px}.owner-mini{text-align:center;padding:10px 2px}.card,.card.wide{grid-column:span 6}.privileges{grid-template-columns:1fr}.tier ul{min-height:0}}@media(max-width:620px){.app{display:block}.sidebar{position:sticky;z-index:10;top:0;height:auto;padding:8px 10px;border-right:0;border-bottom:1px solid var(--line);flex-direction:row;align-items:center;gap:8px;overflow-x:auto}.brand{flex:0 0 auto}.logo{width:38px;height:38px}.nav-label,.owner-mini,.brand-text{display:none!important}.nav{display:flex;gap:4px}.nav button{padding:10px;min-width:43px}.nav .nav-text{display:none}.main{padding:18px 13px 40px}.topbar{align-items:flex-start}.topbar h1{font-size:24px}.top-actions .btn{padding:8px 10px}.card,.card.wide{grid-column:1/-1}.form-grid{grid-template-columns:1fr}.platforms{grid-template-columns:repeat(2,minmax(0,1fr))}.themes{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:23px 18px}}
+
+.role-owner{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:19px;height:19px;margin-left:5px;border-radius:50%;font-size:12px;font-weight:1000;color:#fff;background:linear-gradient(145deg,#080808 0 45%,#e51b3e 46% 100%);border:1px solid #ff334f;box-shadow:0 0 0 2px #e51b3e22,0 0 13px #f22b4a88}
+.role-admin{background:linear-gradient(90deg,#ff4b7d,#b66cff,#4ee8ff,#ff4b7d);background-size:300%;color:transparent;background-clip:text;animation:shine 3s linear infinite;font-weight:950}.nick-solid{background:none!important;color:var(--nick-color,#ff3158)!important;-webkit-text-fill-color:var(--nick-color,#ff3158)!important}.nick-gradient{background:linear-gradient(90deg,var(--nick-color,#ff3158),#a855f7,#22d3ee,var(--nick-color,#ff3158));background-size:250%;color:transparent!important;-webkit-background-clip:text;background-clip:text}.nick-animated{background:linear-gradient(90deg,#ff3158,#ffcc70,#43e8d8,#5a8cff,#d66bff,#ff3158);background-size:400%;color:transparent!important;-webkit-background-clip:text;background-clip:text;animation:shine 2.8s linear infinite}
+.role-user{color:var(--text);font-weight:750}
+.profile-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);gap:15px}
+.profile-preview{display:flex;align-items:center;gap:17px;padding:20px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--panel)),var(--panel))}
+.avatar{width:94px;height:94px;border-radius:25px;object-fit:cover;display:grid;place-items:center;background:linear-gradient(145deg,var(--accent),#20132b);border:2px solid color-mix(in srgb,var(--accent) 65%,white);font-size:33px;font-weight:900;flex:0 0 auto;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar.small-avatar{width:43px;height:43px;border-radius:13px;font-size:18px}
+.profile-name{font-size:23px;font-weight:900;overflow-wrap:anywhere}
+.role-label{display:inline-block;font-size:10px;letter-spacing:1px;padding:4px 8px;border:1px solid var(--line);border-radius:99px;color:var(--muted);margin-top:5px}
+.balance-row{display:flex;align-items:center;gap:9px;margin-top:9px}.balance-value{font-size:18px;font-weight:900;color:#50e3a4;letter-spacing:-.4px}.balance-add{width:27px;height:27px;border:0;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-size:20px;font-weight:900;line-height:1;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 30%,transparent)}.balance-add:hover{transform:translateY(-2px) scale(1.08);filter:brightness(1.18);box-shadow:0 0 22px color-mix(in srgb,var(--accent) 55%,transparent)}
+.balance-value{display:inline-block;transform-origin:left center}
+.balance-value.balance-pop{animation:balancePop .72s cubic-bezier(.2,.85,.25,1)}
+.balance-value.balance-glow{ text-shadow:0 0 12px #50e3a488,0 0 28px #50e3a444}
+@keyframes balancePop{0%{transform:scale(1);filter:brightness(1)}28%{transform:scale(1.42);filter:brightness(1.8)}58%{transform:scale(.94)}100%{transform:scale(1);filter:brightness(1)}}
+.balance-history{display:grid;gap:9px;margin-top:14px}
+.balance-history-item{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(110deg,#50e3a40b,transparent)}
+.balance-history-icon{width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:grid;place-items:center;color:var(--good);background:#50e3a418;font-weight:900}
+.balance-history-item .grow{flex:1;min-width:0}
+.balance-history-amount{color:var(--good);font-weight:900;white-space:nowrap}
+.balance-history-date{font-size:11px;color:var(--muted)}
+.balance-empty{padding:18px;text-align:center;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px}
+@media(prefers-reduced-motion:reduce){.balance-value.balance-pop{animation:none}}
+.avatar-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#avatarFile{display:none}
+@media(max-width:700px){.profile-layout{grid-template-columns:1fr}.profile-preview{align-items:flex-start}}
+
+</style></head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">P</div><div class="brand-text">PANIC-SNOS<small>CONTROL CENTER</small></div></div>
+  <div class="nav-label">РАБОЧАЯ ОБЛАСТЬ</div>
+  <nav class="nav" aria-label="Главное меню">
+    <button class="active" data-page="home"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg></span><span class="nav-text">Главная</span></button>
+    <button data-page="updates"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><path d="M5 5h4M15 19h4"/></svg></span><span class="nav-text">Обновления</span></button>
+    <button data-page="loadtest"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/><path d="M4 4h2M18 20h2"/></svg></span><span class="nav-text">Тест нагрузки</span></button>
+    <button data-page="takedown"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-9 12h7l-1 8 10-13h-7z"/></svg></span><span class="nav-text">Снос</span></button>
+    <button data-page="privileges"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg></span><span class="nav-text">Привилегии</span></button>
+    <button data-page="settings"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.2 1-1.4 2.4-1.5-.5a7.7 7.7 0 0 1-1.8 1l-.3 1.6h-2.8l-.3-1.6a7.7 7.7 0 0 1-1.8-1l-1.5.5-1.4-2.4 1.2-1a7.7 7.7 0 0 1 0-2l-1.2-1 1.4-2.4 1.5.5a7.7 7.7 0 0 1 1.8-1l.3-1.6h2.8l.3 1.6a7.7 7.7 0 0 1 1.8 1l1.5-.5 1.4 2.4-1.2 1a7.7 7.7 0 0 1 0 2z"/></svg></span><span class="nav-text">Настройки</span></button>
+    <button data-page="profile"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="nav-text">Профиль</span></button>
+    <button data-page="admin"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span><span class="nav-text">Админ-панель</span></button>
+  </nav>
+  <div class="owner-mini"><div class="crown">♛</div><div class="owner-info"><div class="owner-name">Panic Attack</div><div class="tiny muted">Владелец проекта</div></div></div>
+</aside>
+<main class="main">
+<header class="topbar"><div><div class="eyebrow">SECURE COMMUNITY / REPORT DESK</div><h1 id="pageTitle">Панель управления</h1></div><div class="top-actions"><button class="btn" id="quickTheme">◉ Цвет</button></div></header>
+
+<section class="page active" id="page-home">
+  <div class="section-title"><div><div class="eyebrow">PANIC-SNOS / CONTROL CENTER</div><h2>Обзор системы</h2><div class="muted">Локальная панель управления и инструменты профиля.</div></div></div>
+  <div class="grid">
+    <div class="card"><div class="card-icon">◷</div><div class="muted tiny">ОТКРЫТИЯ В ЭТОМ БРАУЗЕРЕ</div><div class="stat" id="homeVisits">0</div><div class="tiny muted">Локальный счётчик</div></div>
+    <div class="card"><div class="card-icon">●</div><div class="muted tiny">АКТИВНЫЕ ВКЛАДКИ</div><div class="stat" id="homeActive">1</div><div class="tiny muted">На этом устройстве</div></div>
+    <div class="card"><div class="card-icon">♛</div><div class="muted tiny">ВЛАДЕЛЕЦ</div><div class="stat" style="font-size:21px">Panic Attack</div><div class="tiny muted">Основатель Panic-Snos</div></div>
+    <div class="card wide"><h3>Последние обновления</h3><div id="homeRecentUpdates" class="list"><div class="muted tiny">Пока обновлений нет.</div></div><button class="btn small" data-goto="updates">Все обновления →</button></div>
+    <div class="card"><h3>Быстрый старт</h3><p class="muted tiny">Настрой профиль, выбери тему и следи за обновлениями проекта.</p><button class="btn small" data-goto="profile">Настроить профиль →</button></div>
+  </div>
+</section>
+
+<section class="page" id="page-takedown">
+  <div class="section-title"><div><div class="eyebrow">PANIC-SNOS / REPORT PREPARATION</div><h2>Подготовка обращения</h2><div class="muted">Выбери платформу, основание и ссылку на контент</div></div></div>
+  <div class="grid">
+    <div class="card wide"><h3>Параметры обращения</h3>
+      <form id="takedownForm">
+        <div class="form-grid">
+          <div class="field"><label for="tdPlatform">Социальная сеть</label><select id="tdPlatform"><option>TikTok</option><option>Telegram</option><option>YouTube</option><option>Instagram</option><option>Facebook</option><option>VK</option><option>X / Twitter</option><option>Discord</option><option>Reddit</option><option>Twitch</option><option>Другая сеть</option></select></div>
+          <div class="field" id="tdCustomWrap" style="display:none"><label for="tdCustom">Название сети</label><input id="tdCustom" maxlength="80" placeholder="Название платформы"></div>
+          <div class="field"><label for="tdReason">Причина обращения</label><select id="tdReason"><option>Мошенничество или обман</option><option>Выдача себя за другого</option><option>Угрозы или травля</option><option>Спам</option><option>Нарушение авторских прав</option><option>Опасный контент</option><option>Другое — проверить правила сети</option></select></div>
+          <div class="field"><label for="tdUrl">Ссылка на пост или аккаунт</label><input id="tdUrl" type="url" required placeholder="https://..."></div>
+          <div class="field"><label for="tdCount">Количество шагов процесса</label><input id="tdCount" type="number" min="1" max="1000000" step="1" value="100" required><small class="muted tiny">Можно выбрать от 1 до 1 000 000 для отображения прогресса.</small></div>
+        </div>
+        <p><button class="btn primary" type="submit">▶ Запустить процесс</button> <button class="btn" type="button" id="tdOfficial">Открыть официальный центр ↗</button></p>
+      </form>
+    </div>
+    <div class="card"><div class="eyebrow">СТАТУС ПРОЦЕССА</div><h3 id="tdStatus">Ожидание запуска</h3><div class="stat" id="tdProgressCount">0 <span class="muted tiny">/ 100</span></div><div class="meter" style="height:10px"><span id="tdProgressBar"></span></div><p class="muted tiny" id="tdProgressText">Ожидание запуска.</p><button class="btn small" id="tdStop" type="button" disabled>Остановить процесс</button></div>
+    <div class="card full"><h3>Журнал процессов</h3><div id="tdLog" class="list"><div class="muted tiny">Запусков пока нет.</div></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-updates">
+ <div class="section-title"><div><div class="eyebrow">PROJECT NEWS</div><h2>Обновления проекта</h2><div class="muted">Новости и заметки о новых версиях Panic-Snos.</div></div></div>
+ <div class="grid"><div class="card wide"><h3>Опубликовать обновление</h3><p class="muted tiny">Пока сайт размещён на GitHub Pages, записи сохраняются только в этом браузере. Чтобы они были видны всем посетителям, нужен общий сервер или база данных.</p><form id="updateForm"><div class="field"><label for="updateTitle">Заголовок</label><input id="updateTitle" maxlength="120" required placeholder="Например, Обновление интерфейса"></div><div class="field"><label for="updateBody">Текст обновления</label><textarea id="updateBody" maxlength="3000" required placeholder="Что изменилось в проекте?"></textarea></div><button class="btn primary" type="submit">Опубликовать</button></form></div><div class="card"><h3>Статистика этого браузера</h3><div class="muted tiny">Локальные показатели, не глобальная статистика сайта.</div><p>Открытия страницы</p><div class="stat" id="visitCount">0</div><p>Активные вкладки на этом устройстве</p><div class="stat" id="activeCount">1</div><p>Локальные профили</p><div class="stat" id="accountCount">0</div></div><div class="card full"><h3>Лента обновлений</h3><div id="updateFeed" class="list"><div class="muted tiny">Пока обновлений нет.</div></div></div></div>
+</section>
+
+
+
+<section class="page" id="page-loadtest">
+ <div class="section-title"><div><div class="eyebrow">NETWORK LAB</div><h2>Ddos-Attack</h2><div class="muted">Панель проверки доступности собственного тестового стенда.</div></div></div>
+ <div class="grid">
+  <div class="card wide"><h3>Проверка стенда</h3>
+   <div class="notice">Безопасный режим: страница не генерирует DDoS-трафик. Указывай только адрес собственного сервера для единичной проверки доступности.</div>
+   <div class="field"><label for="simPlatform">Платформа / тип стенда</label><select id="simPlatform"><option>TikTok</option><option>Telegram</option><option>YouTube</option><option>Instagram</option><option>Facebook</option><option>VK</option><option>X / Twitter</option><option>Discord</option><option>Reddit</option><option>Twitch</option><option>Другой собственный стенд</option></select></div><div class="field"><label for="simUrl">URL собственного стенда</label><input id="simUrl" type="url" placeholder="https://your-test-server.example" /></div>
+   <div class="field"><label for="simTarget">Количество шагов отображения (до 100 000 000)</label><input id="simTarget" type="number" min="1" max="100000000" step="1" value="1000000"></div>
+   <p><button class="btn primary" id="simStart" type="button">▶ Запустить проверку</button> <button class="btn" id="simStop" type="button" disabled>Остановить</button></p>
+  </div>
+  <div class="card"><div class="eyebrow">СТАТУС СЦЕНАРИЯ</div><h3 id="simStatus">Ожидание</h3><div class="stat" id="simCount">0 / 1 000 000</div><div class="meter" style="height:10px"><span id="simBar"></span></div><p class="muted tiny" id="simText">Готов к запуску.</p></div>
+ </div>
+</section>
+
+<section class="page" id="page-privileges">
+ <div class="section-title"><div><div class="eyebrow">MEMBERSHIP</div><h2>Привилегии «Пантеон»</h2><div class="muted">Уровни оформления и удобства — без обещаний блокировки чужих аккаунтов.</div></div></div>
+ <div class="privileges">
+  <div class="tier"><div class="eyebrow">01 / START</div><h3>Новичок</h3><div class="price">Бесплатно</div><ul><li>Личный журнал</li><li>Базовые темы</li><li>Экспорт карточек</li></ul><button class="btn" data-tier="Новичок">Текущий уровень</button></div>
+  <div class="tier featured"><div class="eyebrow">02 / PLUS</div><h3>Пантеон+</h3><div class="price">₸ 990 <span class="tiny muted">/ месяц</span></div><ul><li>Расширенные цветовые схемы</li><li>Дополнительные варианты карточек</li><li>Приоритетные настройки интерфейса</li></ul><button class="btn primary" data-tier="Пантеон+">Выбрать уровень</button></div>
+  <div class="tier"><div class="eyebrow">03 / ELITE</div><h3>Обсидиан</h3><div class="price">₸ 2 490 <span class="tiny muted">/ месяц</span></div><ul><li>Все темы оформления</li><li>Анимированный профиль</li><li>Экспорт расширенного отчёта</li></ul><button class="btn" data-tier="Обсидиан">Выбрать уровень</button></div>
+ </div>
+ <p class="notice" style="margin-top:15px">Покупки пока не подключены: кнопки показывают выбранный тариф, но не списывают деньги. Для реальных оплат нужна серверная интеграция платёжного провайдера и опубликованные условия.</p>
+</section>
+
+<section class="page" id="page-settings">
+ <div class="section-title"><div><div class="eyebrow">PERSONALIZATION</div><h2>Настройки</h2><div class="muted">Настрой внешний вид под себя.</div></div></div>
+ <div class="grid">
+  <div class="card wide"><h3>Цветовые темы</h3><p class="muted tiny">Выбранный акцент сохраняется в браузере.</p><div class="themes" id="themeGrid">
+   <button class="theme" data-color="#ff3158"><i style="--c:#ff3158"></i>Рубин</button><button class="theme" data-color="#a855f7"><i style="--c:#a855f7"></i>Аметист</button><button class="theme" data-color="#2589ff"><i style="--c:#2589ff"></i>Неон-синий</button><button class="theme" data-color="#00c896"><i style="--c:#00c896"></i>Изумруд</button><button class="theme" data-color="#ff8a24"><i style="--c:#ff8a24"></i>Янтарь</button><button class="theme" data-color="#f4c542"><i style="--c:#f4c542"></i>Золото</button><button class="theme" data-color="#ff4fd8"><i style="--c:#ff4fd8"></i>Фуксия</button><button class="theme" data-color="#e5e7eb"><i style="--c:#e5e7eb"></i>Серебро</button><button class="theme" data-color="#b7ff3c"><i style="--c:#b7ff3c"></i>Лайм</button><button class="theme" data-color="#36e0d0"><i style="--c:#36e0d0"></i>Аква</button><button class="theme" data-color="#ff5c35"><i style="--c:#ff5c35"></i>Коралл</button><button class="theme" data-color="#8b9dff"><i style="--c:#8b9dff"></i>Лаванда</button>
+  </div></div>
+  <div class="card"><h3>Поведение</h3><div class="settings-row"><div><b>Анимации</b><div class="tiny muted">Плавные переходы интерфейса</div></div><input class="switch" type="checkbox" id="animations" checked></div><div class="settings-row"><div><b>Уменьшить движение</b><div class="tiny muted">Для комфортного просмотра</div></div><input class="switch" type="checkbox" id="reduced"></div><div class="settings-row"><div><b>Подтверждать очистку</b></div><input class="switch" type="checkbox" id="confirmClear" checked></div><button class="btn" id="resetSettings" style="margin-top:14px">Сбросить настройки</button></div>
+  <div class="card full"><h3>Конфиденциальность</h3><p class="muted tiny">Этот статический сайт не имеет сервера. Не вводи сюда пароли от соцсетей, платёжные данные или личную информацию. Для регистрации, защищённой админ-панели и синхронизации нужен сервер с безопасным хранением данных.</p></div>
+ </div>
+</section>
+
+
+<section class="page" id="page-profile">
+ <div class="section-title"><div><div class="eyebrow">USER IDENTITY</div><h2>Мой профиль</h2><div class="muted">Настрой отображаемое имя, аватар и оформление профиля.</div></div></div>
+ <div class="profile-layout">
+  <div class="card">
+   <h3>Карточка профиля</h3>
+   <div class="profile-preview">
+    <div class="avatar" id="profileAvatar">P</div>
+    <div><div class="profile-name" id="profileNamePreview">Panic Attack <span class="role-owner" title="Владелец">✓</span></div><div class="muted tiny" id="profileRolePreview">Владелец проекта</div><span class="role-label" id="profileRoleBadge">OWNER</span><div class="balance-row"><span class="balance-value" id="profileBalance">$0.00</span><button class="balance-add" id="addBalance" type="button" aria-label="Добавить доллары" title="Добавить">+</button></div></div>
+   </div>
+   <div class="avatar-actions"><button class="btn primary" id="chooseAvatar" type="button">Выбрать аватар из галереи</button><button class="btn" id="removeAvatar" type="button">Убрать аватар</button><input id="avatarFile" type="file" accept="image/*"></div>
+   <p class="muted tiny">Выбери изображение в галерее телефона. Оно сохраняется локально в этом браузере и может не синхронизироваться с другими устройствами.</p>
+  </div>
+  <div class="card full">
+   <div class="section-title"><div><h3>История пополнений</h3><div class="muted tiny">Последние операции по балансу</div></div><span class="badge good" id="balanceHistoryCount">0 операций</span></div>
+   <div class="balance-history" id="balanceHistory"><div class="balance-empty">Пополнений пока нет</div></div>
+  </div>
+  <div class="card">
+   <h3>Данные профиля</h3>
+   <form id="profileForm">
+    <div class="field"><label for="profileNick">Отображаемый ник</label><input id="profileNick" maxlength="30" required placeholder="Например, Panic Attack"></div>
+    <div class="field"><label for="profileRole">Тип профиля</label><select id="profileRole"><option value="user">Обычный участник</option><option value="admin">Администратор</option><option value="owner">Владелец</option></select></div>
+    <div class="field"><label for="nickStyle">Стиль ника (для администратора/владельца)</label><select id="nickStyle"><option value="solid">Один цвет</option><option value="gradient">Разноцветный градиент</option><option value="animated">Переливающийся градиент</option></select></div>
+    <div class="field"><label for="nickColor">Цвет ника</label><input id="nickColor" type="color" value="#ff3158" style="height:48px;padding:5px"></div>
+    <div class="field"><label>Палитра — 120 оттенков</label><div id="nickPalette" class="themes"></div></div>
+    <div class="notice">На статическом сайте выбор роли меняет только внешний вид этого профиля на вашем устройстве. Настоящие права администратора должны назначаться и проверяться на сервере.</div>
+    <p><button class="btn primary" type="submit">Сохранить профиль</button></p>
+   </form>
+  </div>
+  <div class="card full"><h3>Роли и значки</h3><div class="list">
+   <div class="item"><div class="avatar small-avatar">U</div><div class="grow"><strong class="role-user">Участник</strong><small class="muted">Обычный стиль имени без специального значка.</small></div><span class="badge">USER</span></div>
+   <div class="item"><div class="avatar small-avatar">A</div><div class="grow"><strong class="role-admin">Администратор</strong><small class="muted">Переливающийся цветной ник и метка роли.</small></div><span class="badge">ADMIN</span></div>
+   <div class="item"><div class="avatar small-avatar">♛</div><div class="grow"><strong>Владелец <span class="role-owner">✓</span></strong><small class="muted">Чёрно-красная галочка рядом с ником.</small></div><span class="badge good">OWNER</span></div>
+  </div></div>
+ </div>
+</section>
+
+
+
+<section class="page" id="page-admin">
+ <div class="section-title"><div><div class="eyebrow">RESTRICTED AREA</div><h2>Админ-панель</h2><div class="muted">Вход администратора и инструменты управления интерфейсом.</div></div></div>
+ <div class="grid">
+  <div class="card wide" id="adminLoginCard"><h3>Вход администратора</h3><form id="adminForm"><div class="field"><label for="adminName">Ник администратора</label><input id="adminName" autocomplete="username" required placeholder="Ник администратора"></div><div class="field"><label for="adminPass">Пароль</label><input id="adminPass" type="password" autocomplete="current-password" required placeholder="Пароль"></div><button class="btn primary" type="submit">Войти</button></form><p class="notice" style="margin-top:14px">Важно: GitHub Pages — статический хостинг. Настоящая защищённая админ-панель не может хранить секретный пароль в HTML/JavaScript: любой посетитель может просмотреть исходный код. Подключи серверную авторизацию перед реальным запуском.</p></div>
+  <div class="card"><h3>Состояние проекта</h3><div class="item"><span>●</span><div class="grow"><strong>Клиентский интерфейс</strong><small class="muted">Работает в браузере</small></div><span class="badge good">READY</span></div><div class="item"><span>●</span><div class="grow"><strong>Серверная авторизация</strong><small class="muted">Не подключена</small></div><span class="badge">SETUP</span></div></div>
+  <div class="card full" id="adminTools" hidden><h3>Локальные инструменты</h3><p class="muted tiny">Это настройки только на текущем устройстве, а не управление аккаунтами других посетителей.</p><button class="btn" id="adminExport">Экспорт журнала</button> <button class="btn" id="adminReset">Очистить локальный журнал</button><div class="notice" style="margin-top:12px">Секретный пароль намеренно не вшит в файл сайта. Настоящий вход нужно реализовать на сервере.</div></div>
+ </div>
+</section>
+
+<footer class="footer">Panic-Snos · <span id="year"></span> · Панель проекта · статистика и обновления в этом браузере</footer>
+</main></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const urls={'TikTok':'https://support.tiktok.com/','Telegram':'https://telegram.org/support','YouTube':'https://support.google.com/youtube/','Instagram':'https://help.instagram.com/','Facebook':'https://www.facebook.com/help/','VK':'https://vk.com/support','X / Twitter':'https://help.x.com/','Discord':'https://support.discord.com/'};
+const titles={home:'Панель управления',takedown:'Подготовка обращения',updates:'Обновления проекта',privileges:'Привилегии «Пантеон»',settings:'Настройки',profile:'Мой профиль',admin:'Админ-панель',loadtest:'Ddos-Attack'};
+let cases=[];try{cases=JSON.parse(localStorage.getItem('ps_cases')||'[]');if(!Array.isArray(cases))cases=[]}catch{cases=[]}
+function toast(s){const el=$('#toast');el.textContent=s;el.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>el.classList.remove('show'),2800)}
+function saveCases(){try{localStorage.setItem('ps_cases',JSON.stringify(cases))}catch{toast('Не удалось сохранить: возможно, память браузера заполнена')}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(name){$$('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));$('#pageTitle').textContent=titles[name]||'Panic-Snos';window.scrollTo({top:0,behavior:'smooth'})}
+$$('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.goto)));
+function render(){
+ 
+ const content=cases.length?cases.slice().reverse().map(c=>`<div class="item"><div class="card-icon">▤</div><div class="grow"><strong>${esc(c.target)} · ${esc(c.platform)}</strong><small class="muted">${esc(c.reason)} · ${esc(c.date)}</small></div><span class="badge">Черновик</span><button class="btn small open-case" data-id="${c.id}">Открыть форму ↗</button></div>`).join(''):'<div class="muted tiny">Обращений пока нет.</div>';
+
+ $$('.open-case').forEach(b=>b.addEventListener('click',()=>{const c=cases.find(x=>String(x.id)===b.dataset.id);if(c)window.open(urls[c.platform]||'https://www.google.com/','_blank','noopener,noreferrer')}));
+
+}
+let lastPlatform='TikTok';
+function exportCases(){if(!cases.length){toast('Журнал пуст');return}const blob=new Blob([JSON.stringify(cases,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='panic-snos-report-log.json';a.click();URL.revokeObjectURL(a.href);toast('Экспорт подготовлен')}
+$('#adminExport').addEventListener('click',exportCases);
+function clearCases(){if(!cases.length){toast('Журнал уже пуст');return}if($('#confirmClear').checked&&!confirm('Удалить все локальные записи?'))return;cases=[];saveCases();render();toast('Локальный журнал очищен')}
+$('#adminReset').addEventListener('click',clearCases);
+function setTheme(color){const root=document.documentElement;root.style.setProperty('--accent',color);root.style.setProperty('--accent2',`color-mix(in srgb, ${color} 68%, #160b20)`);root.style.setProperty('--bg',`color-mix(in srgb, ${color} 8%, #08070d)`);root.style.setProperty('--panel',`color-mix(in srgb, ${color} 9%, #111019)`);root.style.setProperty('--panel2',`color-mix(in srgb, ${color} 13%, #191622)`);root.style.setProperty('--line',`color-mix(in srgb, ${color} 24%, #302b39)`);root.style.setProperty('--text','#f8f6fb');root.style.setProperty('--muted',`color-mix(in srgb, ${color} 15%, #b9b3c4)`);root.style.setProperty('--surface-soft',`color-mix(in srgb, ${color} 7%, var(--panel))`);root.style.setProperty('--surface-deep',`color-mix(in srgb, ${color} 6%, var(--bg))`);document.querySelector('meta[name=theme-color]')?.setAttribute('content',color);try{localStorage.setItem('ps_theme',color)}catch{};$$('.theme').forEach(b=>b.classList.toggle('active',b.dataset.color===color))}
+let savedTheme='#ff3158';try{savedTheme=localStorage.getItem('ps_theme')||savedTheme}catch{};setTheme(savedTheme);
+$$('.theme').forEach(b=>b.addEventListener('click',()=>{setTheme(b.dataset.color);toast('Тема изменена')}));
+$('#quickTheme').addEventListener('click',()=>go('settings'));
+$('#animations').addEventListener('change',e=>{document.body.style.setProperty('--anim-duration',e.target.checked?'.25s':'0s');document.body.classList.toggle('no-animations',!e.target.checked);toast(e.target.checked?'Анимации включены':'Анимации отключены')});
+$('#reduced').addEventListener('change',e=>{document.body.classList.toggle('reduced-motion',e.target.checked);toast(e.target.checked?'Уменьшение движения включено':'Стандартные эффекты включены')});
+$('#resetSettings').addEventListener('click',()=>{setTheme('#ff3158');$('#animations').checked=true;$('#reduced').checked=false;$('#confirmClear').checked=true;document.body.classList.remove('no-animations','reduced-motion');toast('Настройки сброшены')});
+$$('[data-tier]').forEach(b=>b.addEventListener('click',()=>toast('Выбран уровень «'+b.dataset.tier+'». Оплата пока не подключена.')));
+
+
+$('#adminForm').addEventListener('submit',e=>{e.preventDefault();$('#adminPass').value='';toast('Для безопасного входа нужна серверная авторизация. Пароль не проверяется в браузере.');});
+
+const profileKey='ps_profile_v1';
+let profile={nick:'Panic Attack',role:'owner',avatar:'',balance:0,balanceHistory:[]};
+try{const saved=JSON.parse(localStorage.getItem(profileKey)||'null');if(saved&&typeof saved==='object')profile={...profile,...saved}}catch{}
+function money(value){return '$'+(Number(value)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function renderBalance(animate=false,fromValue=0){
+ const el=$('#profileBalance');if(!el)return;
+ const target=Number(profile.balance)||0;
+ if(animate){
+  const start=performance.now(),duration=850;
+  el.classList.remove('balance-pop','balance-glow');void el.offsetWidth;
+  el.classList.add('balance-pop','balance-glow');
+  const tick=now=>{const p=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-p,4);el.textContent=money(fromValue+(target-fromValue)*eased);if(p<1)requestAnimationFrame(tick);else{el.textContent=money(target);setTimeout(()=>el.classList.remove('balance-glow'),650)}};
+  requestAnimationFrame(tick);
+ }else el.textContent=money(target);
+}
+function renderBalanceHistory(){
+ const host=$('#balanceHistory'),count=$('#balanceHistoryCount');if(!host)return;
+ const entries=Array.isArray(profile.balanceHistory)?profile.balanceHistory:[];
+ if(count)count.textContent=entries.length+' '+(entries.length===1?'операция':entries.length>=2&&entries.length<=4?'операции':'операций');
+ host.innerHTML=entries.length?entries.slice().reverse().map(item=>`<div class="balance-history-item"><div class="balance-history-icon">＋</div><div class="grow"><strong>Пополнение баланса</strong><div class="balance-history-date">${esc(item.date||'Дата не указана')}</div></div><div class="balance-history-amount">+${money(item.amount)}</div></div>`).join(''):'<div class="balance-empty">Пополнений пока нет</div>';
+}
+function renderProfile(){
+ const nick=String(profile.nick||'Участник').slice(0,30),role=profile.role||'user';
+ const roleClass=role==='admin'?'role-admin':role==='owner'?'':'role-user';
+ const roleText=role==='owner'?'Владелец проекта':role==='admin'?'Администратор':'Участник';
+ const roleBadge=role==='owner'?'OWNER':role==='admin'?'ADMIN':'USER';
+ const marker=role==='owner'?' <span class="role-owner" title="Владелец Panic-Snos">✓</span>':'';
+ $('#profileNamePreview').innerHTML=`<span class="${roleClass}">${esc(nick)}</span>${marker}`;
+ $('#profileRolePreview').textContent=roleText;$('#profileRoleBadge').textContent=roleBadge;
+ renderBalance();renderBalanceHistory();
+ $('#profileNick').value=nick;$('#profileRole').value=role;$('#nickColor').value=profile.nickColor||'#ff3158';$('#nickStyle').value=profile.nickStyle||'animated';const nameEl=$('#profileNamePreview').querySelector('span');if(nameEl){nameEl.classList.remove('nick-solid','nick-gradient','nick-animated');if(role!=='user'){nameEl.classList.add('nick-'+(profile.nickStyle||'animated'));nameEl.style.setProperty('--nick-color',profile.nickColor||'#ff3158')}else{nameEl.style.removeProperty('--nick-color')}}
+ const av=$('#profileAvatar');
+ if(profile.avatar){av.innerHTML='';const img=document.createElement('img');img.alt='Аватар профиля';img.src=profile.avatar;av.appendChild(img)}
+ else{av.textContent=(nick.trim()[0]||'U').toUpperCase()}
+}
+function saveProfile(){try{localStorage.setItem(profileKey,JSON.stringify(profile));return true}catch{toast('Не удалось сохранить профиль: изображение может быть слишком большим');return false}}
+$('#profileForm').addEventListener('submit',e=>{
+ e.preventDefault();profile.nick=$('#profileNick').value.trim()||'Участник';profile.role=$('#profileRole').value;profile.nickColor=$('#nickColor').value||'#ff3158';profile.nickStyle=$('#nickStyle').value||'animated';
+ if(profile.role==='owner'&&profile.nick!=='Panic Attack'){toast('Значок владельца в этой версии доступен только профилю Panic Attack');profile.role='user'}
+ saveProfile();renderProfile();toast('Профиль сохранён на этом устройстве');
+});
+$('#chooseAvatar').addEventListener('click',()=>$('#avatarFile').click());
+$('#avatarFile').addEventListener('change',e=>{
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ if(!file.type.startsWith('image/')){toast('Выбери файл изображения');return}
+ if(file.size>2*1024*1024){toast('Выбери изображение до 2 МБ');e.target.value='';return}
+ const reader=new FileReader();reader.onload=()=>{profile.avatar=String(reader.result||'');if(saveProfile()){renderProfile();toast('Аватар обновлён')}};reader.readAsDataURL(file);
+});
+$('#removeAvatar').addEventListener('click',()=>{profile.avatar='';saveProfile();renderProfile();toast('Аватар удалён')});
+renderProfile();
+$('#addBalance').addEventListener('click',()=>{
+  const raw=prompt('Сколько долларов добавить?');
+  if(raw===null)return;
+  const amount=Number(raw.trim().replace(',','.'));
+  if(!Number.isFinite(amount)||amount<=0||amount>1000000000){toast('Введи сумму больше 0');return}
+  const previous=Number(profile.balance)||0;
+  profile.balance=previous+amount;
+  if(!Array.isArray(profile.balanceHistory))profile.balanceHistory=[];
+  profile.balanceHistory.push({amount,date:new Date().toLocaleString('ru-RU')});
+  profile.balanceHistory=profile.balanceHistory.slice(-100);
+  if(saveProfile()){renderBalance(true,previous);renderBalanceHistory();toast('Баланс пополнен · +'+money(amount))}
+});
+
+// Профиль: 120 оттенков и 3 стиля ника
+const palette=$('#nickPalette');
+for(let i=0;i<120;i++){const hue=Math.round(i*360/120);const color=`hsl(${hue} 88% 58%)`;const b=document.createElement('button');b.type='button';b.className='theme';b.title=`Оттенок ${i+1}`;b.innerHTML=`<i style="--c:${color}"></i><small>${String(i+1).padStart(3,'0')}</small>`;b.addEventListener('click',()=>{$('#nickColor').value=hslToHex(hue,88,58);profile.nickColor=$('#nickColor').value;renderProfile();saveProfile()});palette.appendChild(b)}
+function hslToHex(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12;const a=s*Math.min(l,1-l);const f=n=>Math.round(255*(l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1))))).toString(16).padStart(2,'0');return '#'+f(0)+f(8)+f(4)}
+$('#nickColor').addEventListener('input',e=>{profile.nickColor=e.target.value;renderProfile()});$('#nickStyle').addEventListener('change',e=>{profile.nickStyle=e.target.value;renderProfile()});
+// Локальный индикатор шагов; URL не получает нагрузочных запросов.
+let simTimer=null;$('#simStart').addEventListener('click',()=>{let target=Number($('#simTarget').value);if(!Number.isInteger(target)||target<1||target>100000000){toast('Укажи число от 1 до 100 000 000');return}const platform=$('#simPlatform').value;const url=$('#simUrl').value.trim();if(url){try{const u=new URL(url);if(!['http:','https:'].includes(u.protocol))throw 0}catch{toast('Укажи корректный URL');return}}if(simTimer)clearInterval(simTimer);let n=0;$('#simStatus').textContent='Проверка запущена';$('#simCount').textContent='0 / '+target.toLocaleString('ru-RU');$('#simBar').style.width='0%';$('#simText').textContent='Локальный индикатор для '+platform+'; сетевые запросы нагрузки не выполняются.';$('#simStop').disabled=false;simTimer=setInterval(()=>{n=Math.min(target,n+Math.max(1,Math.ceil(target/100)));$('#simCount').textContent=n.toLocaleString('ru-RU')+' / '+target.toLocaleString('ru-RU');$('#simBar').style.width=(n/target*100)+'%';if(n>=target){clearInterval(simTimer);simTimer=null;$('#simStatus').textContent='Проверка завершена';$('#simText').textContent='Индикатор завершён; реальная нагрузка не создавалась.';$('#simStop').disabled=true}},1500)});$('#simStop').addEventListener('click',()=>{if(simTimer)clearInterval(simTimer);simTimer=null;$('#simStatus').textContent='Остановлено';$('#simText').textContent='Индикатор остановлен';$('#simStop').disabled=true});
+// Local-only stats and update feed; global real-time data requires a shared backend.
+const updKey='ps_updates_local_v1';let updates=[];try{updates=JSON.parse(localStorage.getItem(updKey)||'[]');if(!Array.isArray(updates))updates=[]}catch{updates=[]}
+let visits=1;try{visits=Number(localStorage.getItem('ps_local_visits')||0)+1;localStorage.setItem('ps_local_visits',String(visits))}catch{}
+const tabKey='ps_active_tabs';let tabIds=[];try{tabIds=JSON.parse(localStorage.getItem(tabKey)||'[]')}catch{tabIds=[]}const thisTab=Math.random().toString(36).slice(2);tabIds=tabIds.filter(Boolean);tabIds.push(thisTab);try{localStorage.setItem(tabKey,JSON.stringify(tabIds))}catch{}
+function renderUpdates(){const composer=$('#updateForm');if(composer)composer.style.display=(profile.role==='owner'&&profile.nick==='Panic Attack')?'':'none';const feed=$('#updateFeed');const recent=$('#homeRecentUpdates');const html=updates.slice().reverse().map(u=>`<div class="item"><div class="grow"><strong>${esc(u.title)}</strong><small class="muted">${esc(u.date)} · ${esc(u.author)}</small><p>${esc(u.body)}</p></div></div>`).join('')||'<div class="muted tiny">Пока обновлений нет.</div>';if(feed)feed.innerHTML=html;if(recent)recent.innerHTML=html.split('</div></div>').slice(0,3).join('</div></div>')||'<div class="muted tiny">Пока обновлений нет.</div>';['#visitCount','#homeVisits'].forEach(sel=>{if($(sel))$(sel).textContent=visits.toLocaleString('ru-RU')});['#activeCount','#homeActive'].forEach(sel=>{if($(sel))$(sel).textContent='1'});if($('#accountCount'))$('#accountCount').textContent='0'}
+$('#updateForm').addEventListener('submit',e=>{e.preventDefault();const title=$('#updateTitle').value.trim(),body=$('#updateBody').value.trim();if(!title||!body)return;updates.push({title,body,date:new Date().toLocaleString('ru-RU'),author:'Panic Attack'});try{localStorage.setItem(updKey,JSON.stringify(updates))}catch{}$('#updateForm').reset();renderUpdates();toast('Обновление сохранено в этом браузере')});
+window.addEventListener('storage',e=>{if(e.key===updKey){try{updates=JSON.parse(e.newValue||'[]')}catch{updates=[]}renderUpdates()}});window.addEventListener('beforeunload',()=>{try{localStorage.setItem(tabKey,JSON.stringify(tabIds.filter(x=>x!==thisTab)))}catch{}});renderUpdates();
+$('#year').textContent=new Date().getFullYear();render();
+
+// Интерфейсный счётчик процесса; запросы на отправку жалоб не выполняются.
+let tdTimer=null, tdRunId=0;
+const tdLinks={'TikTok':'https://support.tiktok.com/','Telegram':'https://telegram.org/support','YouTube':'https://support.google.com/youtube/','Instagram':'https://help.instagram.com/','Facebook':'https://www.facebook.com/help/','VK':'https://vk.com/support','X / Twitter':'https://help.x.com/','Discord':'https://support.discord.com/','Reddit':'https://support.reddithelp.com/','Twitch':'https://help.twitch.tv/'};
+$('#tdPlatform').addEventListener('change',()=>{$('#tdCustomWrap').style.display=$('#tdPlatform').value==='Другая сеть'?'block':'none'});
+$('#tdOfficial').addEventListener('click',()=>{const p=$('#tdPlatform').value;const url=tdLinks[p];if(url)window.open(url,'_blank','noopener,noreferrer');else toast('Для этой сети найди официальный центр поддержки самостоятельно')});
+$('#tdStop').addEventListener('click',()=>{if(tdTimer)clearInterval(tdTimer);tdTimer=null;$('#tdStop').disabled=true;$('#tdStatus').textContent='Подготовка остановлена';$('#tdProgressText').textContent='Подготовка обращения остановлена.'});
+$('#takedownForm').addEventListener('submit',e=>{e.preventDefault();let target=Number($('#tdCount').value);if(!Number.isInteger(target)||target<1||target>1000000){toast('Количество должно быть от 1 до 1 000 000');return}const link=$('#tdUrl').value.trim();try{const u=new URL(link);if(!['http:','https:'].includes(u.protocol))throw 0}catch{toast('Укажи корректную ссылку https://');return}if(tdTimer)clearInterval(tdTimer);const p=$('#tdPlatform').value==='Другая сеть'?($('#tdCustom').value.trim()||'Другая сеть'):$('#tdPlatform').value;const reason=$('#tdReason').value;const id=++tdRunId;let n=0;$('#tdStatus').textContent='Подготовка обращений';$('#tdProgressCount').innerHTML='0 <span class="muted tiny">/ '+target.toLocaleString('ru-RU')+'</span>';$('#tdProgressBar').style.width='0%';$('#tdProgressText').textContent='Подготавливается обращение для '+p+'. Для отправки перейдите на официальный сайт платформы.';$('#tdStop').disabled=false;$('#tdLog').insertAdjacentHTML('afterbegin','<div class="item"><div class="grow"><strong>Процесс · '+esc(p)+'</strong><small class="muted">'+esc(reason)+' · '+esc(link)+'</small><div class="tiny muted">Выбранное количество шагов: '+target.toLocaleString('ru-RU')+'</div></div></div>');tdTimer=setInterval(()=>{if(id!==tdRunId){clearInterval(tdTimer);return}const step=Math.max(1,Math.ceil(target/100));n=Math.min(target,n+step);$('#tdProgressCount').innerHTML=n.toLocaleString('ru-RU')+' <span class="muted tiny">/ '+target.toLocaleString('ru-RU')+'</span>';$('#tdProgressBar').style.width=(n/target*100)+'%';if(n>=target){clearInterval(tdTimer);tdTimer=null;$('#tdStop').disabled=true;$('#tdStatus').textContent='Подготовка завершена';$('#tdProgressText').textContent='Данные обращения подготовлены. Отправьте его через официальный сайт платформы.';toast('Процесс завершён')}} ,1500)});
+
+</script></body></html>
